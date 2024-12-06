@@ -1,4 +1,4 @@
-# Message of the Day
+# MacOS Message of the Day
 
 Basic message of the day (MOTD) cli script for MacOS users.
 
@@ -24,9 +24,9 @@ Homebrew is required to install the necessary ascii arts tools. If you don’t h
 
 ### Install the ASCII tools
 
-If you dont like the ASCII arts to show in your terminal, you can skip this step.
+If you don't like the ASCII arts to show in your terminal, you can skip this step.
 
-Figlet provides series fonts style for ASCII arts. Toilet is another tool that can customize the ASCII arts with different colors and styles.
+Figlet provides a variety of fonts style for ASCII arts. Toilet is another tool that can customize the ASCII arts with different colors and styles.
 
 ```bash
 brew install figlet
@@ -54,8 +54,8 @@ Services running:
 
 ### TODO
 
-- [] Add autoconfig startup script
-- [] Add configuration for checking services
+- [ ] Add autoconfig startup script
+- [ ] Add configuration for checking services
 
 ### LICENSE
 
