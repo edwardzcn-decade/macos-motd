@@ -17,7 +17,6 @@ Homebrew is required to install the necessary ascii arts tools. If you don’t h
 
 3. After the installation is complete, ensure Homebrew is working by checking its version:
 
-
   ```bash
   brew --version
   ```
@@ -45,15 +44,17 @@ brew install toilet
 | |  | | (_| | (__| |_| |___) |
 |_|  |_|\__,_|\___|\___/|____/
 
-Welcome, edwardzcn. It's currently Fri  6 Dec 2024 14:17:56 CST
-
-
+Welcome, edwardzcn-decade. It's currently Mon Dec  9 16:13:18 CST 2024
+IP:            192.168.1.200
+Usage of /:    8% of 228G
 Services running:
-  Chrome: ● active Docker: ● active ChatGPT: ● active
+  Chrome: ● active ChatGPT: ● active Teams: ▲ inactive
+  Surge: ● active Docker: ▲ inactive
 ```
 
-### TODO
+### Features
 
+- [x] Show basic system information (macOS/Linux)
 - [ ] Add autoconfig startup script
 - [ ] Add configuration for checking services
 
