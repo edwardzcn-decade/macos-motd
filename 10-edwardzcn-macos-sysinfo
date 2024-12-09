@@ -1,17 +1,44 @@
+#!/bin/bash
 OS_NAME="MacOS"
 user=`whoami`
 date=`date`
 toilet -d /opt/homebrew/share/figlet/fonts -f standard -F metal $OS_NAME
 echo "Welcome, ${user}. It's currently ${date}"
 
-echo
-printf "   "
-for color in {41..46} ; do
-	# Display the color
-	printf "\e[${color}m   "
-done
-printf "\e[0m"
-echo
+# TODO add 2 functions for boardtemp and batteryinfo as hardware information
+#
+#
+
+# get_ip_address
+function display() {
+	# $1=name $2=value $3=red_limit $4=minimal_show_limit $5=unit $6=after $7=acs/desc{
+        # battery red color is opposite, lower number
+        if [[ "$1" == "Battery" ]]; then local great="<"; else local great=">"; fi
+        if [[ -n "$2" && "$2" -gt "0" && (( "${2%.*}" -ge "$4" )) ]]; then
+                printf "%-14s" "$1:"
+                if awk "BEGIN{exit ! ($2 $great $3)}"; then echo -ne "\e[0;91m $2"; else echo -ne "\e[0;92m $2"; fi
+                printf "%-1s\x1B[0m" "$5"
+                printf "%-11s\t" "$6"
+                return 1
+        fi
+} # display
+function get_ip_addresses() {
+    ipv4s=$(ifconfig | awk '/inet / && $2 != "127.0.0.1" {print $2}')
+    ipv6s=$(ifconfig | awk '/inet6 / && !/::1/ && !/fe80::/ {print $2}')
+    
+    ipv4s_line=$(echo "$ipv4s" | paste -sd "," -)
+    ipv6s_line=$(echo "$ipv6s" | paste -sd "," -)
+
+    echo "ipv4:${ipv4s_line} ipv6:${ipv6s_line}"
+}
+
+# Display info
+# Display IP
+ip_address=$(get_ip_addresses)
+printf "IP:"
+printf "\x1B[92m%s\x1B[0m" "$ip_address"
+echo "" # fixed newline
+
 
 declare -a services=(
 "com.google.Chrome"
@@ -28,10 +55,11 @@ declare -a serviceNames=(
 declare -a serviceStatus=()
 
 # Get status of all my services
+# change name incase of status in zsh
 for service in "${services[@]}"
 do
-	status=`launchctl list | grep "$service"`
-	if [[ ! -z $status ]]; then
+	active_status=`launchctl list | grep "$service"`
+	if [[ ! -z $active_status ]]; then
 		serviceStatus+=("active")
 	else
 		serviceStatus+=("inactive")
