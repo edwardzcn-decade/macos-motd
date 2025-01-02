@@ -81,6 +81,7 @@ declare -a services=(
 "com.microsoft.team"
 "com.nssurge.surge-mac"
 "com.docker"
+"mysql" # homebrew.mxcl.mysql@8.0 for brew service start
 )
 
 
@@ -90,6 +91,7 @@ declare -a serviceNames=(
 "Teams"
 "Surge"
 "Docker"
+"MySQL"
 )
 
 declare -a serviceStatus=()
