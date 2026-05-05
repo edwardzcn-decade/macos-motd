@@ -3,6 +3,7 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STATE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/macos-motd"
 
+# Use a stable per-boot token so local startup tasks run again after reboot.
 boot_id() {
 	if [[ "$(uname)" == "Darwin" ]]; then
 		sysctl -n kern.boottime 2>/dev/null | awk -F'[=,]' '{gsub(/ /, "", $2); print $2}'
@@ -13,6 +14,7 @@ boot_id() {
 	fi
 }
 
+# Convert names like 99-fix_desktop_links into a MOTD-friendly label.
 script_label() {
 	local label
 	label="$(basename "$1")"
@@ -28,6 +30,7 @@ run_boot_script() {
 	label="$(script_label "$script")"
 	marker="$STATE_DIR/$(basename "$script").boot"
 
+	# A matching marker means this startup task already succeeded this boot.
 	if [[ -n "$current_boot" && -f "$marker" ]]; then
 		previous_boot="$(cat "$marker" 2>/dev/null)"
 		if [[ "$previous_boot" == "$current_boot" ]]; then
@@ -39,6 +42,7 @@ run_boot_script() {
 	output="$("$script" 2>&1)"
 	status=$?
 
+	# Keep noisy local script output out of the MOTD unless the task fails.
 	printf "  %-24s " "$label"
 	if [[ "$status" -eq 0 ]]; then
 		printf "\033[32m● done\033[0m\n"
@@ -56,6 +60,7 @@ run_boot_script() {
 for script in "$SCRIPT_DIR"/[0-9][0-9]-*; do
 	if [[ -f "$script" && -x "$script" ]]; then
 		case "$(basename "$script")" in
+			# Reserve 90-* through 99-* for machine-local once-per-boot tasks.
 			9[0-9]-*)
 				boot_scripts+=("$script")
 				;;
@@ -67,6 +72,7 @@ for script in "$SCRIPT_DIR"/[0-9][0-9]-*; do
 done
 
 if [[ "${#boot_scripts[@]}" -gt 0 ]]; then
+	# Suppress the whole section when every startup task was already run.
 	boot_output="$(
 	for script in "${boot_scripts[@]}"; do
 		run_boot_script "$script"
