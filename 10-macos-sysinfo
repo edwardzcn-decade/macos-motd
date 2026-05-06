@@ -130,8 +130,7 @@ declare -a serviceNames=(
 
 declare -a serviceStatus=()
 
-# Get status of all my services
-# change name incase of status in zsh
+# Read launchctl once, then match each configured service identifier locally.
 launchctl_services=$(launchctl list)
 for service in "${services[@]}"
 do
@@ -146,6 +145,7 @@ done
 echo ""
 echo "Services running:"
 
+# Use the longest label so every status column starts in the same place.
 nameWidth=0
 for name in "${serviceNames[@]}"; do
 	if [[ "${#name}" -gt "$nameWidth" ]]; then
@@ -158,6 +158,7 @@ if ! [[ "$termWidth" =~ ^[0-9]+$ ]]; then
 	termWidth=80
 fi
 
+# Fit as many columns as the terminal can hold, with a readable upper bound.
 entryWidth=$((nameWidth + 14))
 columns=$((termWidth / entryWidth))
 if [[ "$columns" -lt 1 ]]; then
