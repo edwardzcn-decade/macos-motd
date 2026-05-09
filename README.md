@@ -4,6 +4,18 @@ Basic message of the day (MOTD) cli script for MacOS users.
 
 ## Usage
 
+### Quick setup
+
+Run the autoconfig script from this repository:
+
+```bash
+./install.sh
+```
+
+The installer asks for the ASCII banner text. Press enter to use `macOS`, or type a custom value (e.g. your pc name).
+
+It writes the banner value to `~/.macos-motd.conf` and adds a marked startup block to `~/.zshrc`. Running it more than once will **not** duplicate the startup block.
+
 ### Install Homebrew
 
 Homebrew is required to install the necessary ascii arts tools. If you don’t have Homebrew installed, follow the [installation steps](https://brew.sh/) below:
@@ -35,6 +47,19 @@ brew install figlet
 brew install toilet
 ```
 
+If `toilet` is not installed, the script falls back to a simple colored text banner.
+
+### Configure services
+
+Service checks are configured in `10-macos-sysinfo` with two aligned Bash arrays: `services` and `serviceNames`.
+
+To enable or disable a service, comment or uncomment the matching line in both arrays:
+
+```bash
+# "notion.id"
+# "Notion"
+```
+
 ## Display
 
 ```bash
@@ -55,8 +80,9 @@ Services running:
 ### Features
 
 - [x] Show basic system information (macOS/Linux)
-- [ ] Add autoconfig startup script
-- [ ] Add configuration for checking services
+- [x] Add autoconfig startup script
+- [x] Add naive configuration for checking services
+- [x] Add configurable ASCII banner text
 
 ### LICENSE
 

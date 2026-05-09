@@ -1,10 +1,20 @@
 #!/bin/bash
 ASCII_ART_NAME="MacOS"
 OUTPUT_IPV6=false
+CONFIG_FILE="${HOME}/.macos-motd.conf"
+
+if [[ -f "$CONFIG_FILE" ]]; then
+	source "$CONFIG_FILE"
+fi
+
 os_type=$(uname)
 user=$(whoami)
 date=$(date)
-toilet -d /opt/homebrew/share/figlet/fonts -f standard -F metal $ASCII_ART_NAME
+if command -v toilet >/dev/null 2>&1; then
+	toilet -d /opt/homebrew/share/figlet/fonts -f standard -F metal "$ASCII_ART_NAME"
+else
+	printf "\x1B[1;36m== %s ==\x1B[0m\n" "$ASCII_ART_NAME"
+fi
 echo "Welcome, ${user}. It's currently ${date}"
 
 # TODO add 2 functions for boardtemp and batteryinfo as hardware information
@@ -78,29 +88,54 @@ display "Usage of /" "$root_usage" "90" "1" "%" " of $root_total"
 declare -a services=(
 "com.google.Chrome"
 "com.openai.chat"
+"com.openai.codex"
 "com.microsoft.team"
 "com.nssurge.surge-mac"
 "com.docker"
 "mysql" # homebrew.mxcl.mysql@8.0 for brew service start
+"com.tencent.xinWeChat"
+"com.microsoft.VSCode"
+"com.googlecode.iterm2"
+"com.tinyspeck.slackmacgap"
+"ru.keepcoder.Telegram"
+"net.whatsapp.WhatsApp"
+# "notion.id"
+# "com.microsoft.OneDrive"
+# "com.tencent.meeting"
+# "com.microsoft.Outlook"
+# "com.valvesoftware.steam"
 )
 
 
 declare -a serviceNames=(
 "Chrome"
 "ChatGPT"
+"Codex"
 "Teams"
 "Surge"
 "Docker"
 "MySQL"
+"WeChat"
+"VS Code"
+"iTerm"
+"Slack"
+"Telegram"
+"WhatsApp"
+# "Notion"
+# "OneDrive"
+# "Tencent Meeting"
+# "Outlook"
+# "Steam"
 )
 
 declare -a serviceStatus=()
 
 # Get status of all my services
 # change name incase of status in zsh
+launchctl_services=$(launchctl list)
 for service in "${services[@]}"
 do
-	active_status=`launchctl list | grep "$service"`
+	active_status=$(grep -F "$service" <<<"$launchctl_services")
 	if [[ ! -z $active_status ]]; then
 		serviceStatus+=("active")
 	else
