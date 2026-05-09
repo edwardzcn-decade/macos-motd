@@ -16,19 +16,11 @@ The installer asks for the ASCII banner text. Press enter to use `macOS`, or typ
 
 It writes the banner value to `~/.macos-motd.conf` and adds a marked startup block to `~/.zshrc`. Running it more than once will **not** duplicate the startup block.
 
-The startup block calls `run-motd`, which runs executable scripts named like `10-*`, `20-*`, and `30-*` in filename order. The numeric prefix is the display priority.
-
-Avoid startup lines like this:
-
-```bash
-sh $HOME/macos-motd/*
-```
-
-That wildcard form is not a safe extension point. It can run non-MOTD files like `install.sh`, and it does not preserve each script's own shebang.
+The startup block calls `run-motd`, which runs executable scripts named like `10-*`, `20-*`, and `30-*` in filename order. The numeric prefix controls display priority.
 
 ### Install Homebrew
 
-Homebrew is required to install the necessary ascii arts tools. If you don’t have Homebrew installed, follow the [installation steps](https://brew.sh/) below:
+Homebrew is only needed if you want styled ASCII output from `figlet` and `toilet`. If you don’t have Homebrew installed, follow the [installation steps](https://brew.sh/) below:
 
 1. Open your terminal.
 2. Run the following command to install Homebrew with `curl`.
