@@ -18,6 +18,8 @@ It writes the banner value to `~/.macos-motd.conf` and adds a marked startup blo
 
 The startup block calls `run-motd`, which runs executable scripts named like `10-*`, `20-*`, and `30-*` in filename order. The numeric prefix controls display priority.
 
+Scripts from `00-*` through `89-*` run every time the MOTD runs. Scripts from `90-*` through `99-*` are treated as local startup tasks and run at most once per system boot. This is useful for machine-specific maintenance scripts that should stay ignored by git, such as a local `99-*` symlink repair script.
+
 ### Install Homebrew
 
 Homebrew is only needed if you want styled ASCII output from `figlet` and `toilet`. If you don’t have Homebrew installed, follow the [installation steps](https://brew.sh/) below:
@@ -75,8 +77,11 @@ Welcome, edwardzcn-decade. It's currently Mon Dec  9 16:13:18 CST 2024
 IP:            192.168.1.200
 Usage of /:    8% of 228G
 Services running:
-  Chrome: ● active ChatGPT: ● active Teams: ▲ inactive
-  Surge: ● active Docker: ▲ inactive
+  Chrome   ● active    ChatGPT  ● active    Teams    ▲ inactive
+  Surge    ● active    Docker   ▲ inactive
+
+Startup tasks:
+  fix desktop links        ● done
 ```
 
 ### Features
